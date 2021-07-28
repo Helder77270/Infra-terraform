@@ -1,65 +1,53 @@
 provider "google" {
   project     = "stone-bongo-319012" # Nom projet GCP
-  region      = "us-central1" 
+  region      = "europe-central2" 
   credentials = file("./stone-bongo-319012-a581a55821d0.json") # Clé pour login
 }
 
 
 resource "google_container_cluster" "cluster1" { #Créer cluster , default = id cluster
-  name               = "projet-infra-helder1" # Nom à choisir
-  location           = "europe-central2-a"
-  initial_node_count = 3
+  name               = var.project # Nom à choisir
+  location           = var.location
+  initial_node_count = var.initial_node_count
   
 }
 
-resource "google_container_node_pool" "cluster1" {
-  name       = "${var.name}-node-pool"
-  project    = var.project
-  location   = var.location
-  cluster    = google_container_cluster.cluster1.name
-  node_count = 1
+# Créer compte de service
 
-  node_config {
-    preemptible  = true
-    machine_type = var.machine_type
+# resource "google_service_account" "myaccount" {
+#   account_id   = "myaccount"
+#   display_name = "My Service Account"
+# }
 
-    metadata = {
-      disable-legacy-endpoints = "true"
-    }
-
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
-    ]
-  }
-}
+# resource "google_service_account_key" "mykey" {
+#   service_account_id = google_service_account.myaccount.name
+#   public_key_type    = "TYPE_X509_PEM_FILE"
+# }
 
 # resource "helm_release" "prometheus" {
-#   name       = "prometheus"
-#   repository = "https://charts.bitnami.com/bitnami/kube-prometheus-stack"
-#   chart      = "redis"
-#   version    = "6.0.1"
+#    name       = "prometheus"
+#    repository = "https://charts.bitnami.com/bitnami/"
+#    chart      = "kube-prometheus"
 
-#   values = [
-#     "${file("values.yaml")}"
-#   ]
+#    set {
+#      name  = "cluster.enabled"
+#      value = "true"
+#    }
 
-#   set {
-#     name  = "cluster.enabled"
-#     value = "true"
-#   }
+#    set {
+#      name  = "metrics.enabled"
+#      value = "true"
+#    }
 
-#   set {
-#     name  = "metrics.enabled"
-#     value = "true"
-#   }
+#    set {
+#      name  = "service.annotations.prometheus\\.io/port"
+#      value = "9127"
+#      type  = "string"
+#    }
+#  }
 
-#   set {
-#     name  = "service.annotations.prometheus\\.io/port"
-#     value = "9127"
-#     type  = "string"
-#   }
-# }
+#kubectl apply -f mon_nom_ficher_yaml
+
 
 
 

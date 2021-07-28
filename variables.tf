@@ -1,20 +1,15 @@
-  
-variable "name" {
-  default = "test"
+variable "project" {
+  default = "tp-infra-helder1"
 }
 
-variable "project" {
-  default = "tp-infra-helder"
+variable "region" {
+  default = "europe-central2"
 }
 
 variable "location" {
-  default = "us-central1-a"
+  default = "europe-central2-a"
 }
 
 variable "initial_node_count" {
-  default = 1
-}
-
-variable "machine_type" {
-  default = "n1-standard-1"
+  default = 3
 }
